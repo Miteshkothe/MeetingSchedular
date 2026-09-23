@@ -1,7 +1,11 @@
 HELP.md
 .env
 target/
-src/main/java/**
+src/main/java/com/meetingbooking/config/
+src/main/java/com/meetingbooking/conflict/
+src/main/java/com/meetingbooking/idempotency/
+src/main/java/com/meetingbooking/recurrence/
+src/main/java/com/meetingbooking/scheduler/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
