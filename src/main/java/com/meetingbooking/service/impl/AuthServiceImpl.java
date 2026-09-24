@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Email is already registered: " + request.getEmail());
         }
 
-        // Public self-registration must never grant privileged roles from client input.
+
         Role assignedRole = Role.ROLE_USER;
 
         User user = User.builder()

@@ -23,11 +23,6 @@ public interface MeetingOccurrenceRepository extends JpaRepository<MeetingOccurr
 
     Optional<MeetingOccurrence> findBySeriesIdAndStartTimeUtc(Long seriesId, Instant startTimeUtc);
 
-    /**
-     * Finds conflicting room bookings for a half-open interval [newStart, newEnd).
-     * Conflict condition: existingStart < newEnd AND existingEnd > newStart.
-     * Excludes cancelled occurrences and optionally the occurrence currently being edited.
-     */
     @Query("SELECT o FROM MeetingOccurrence o " +
            "WHERE o.room.id = :roomId " +
            "AND o.status = 'CONFIRMED' " +
@@ -41,9 +36,7 @@ public interface MeetingOccurrenceRepository extends JpaRepository<MeetingOccurr
             @Param("excludeOccurrenceId") Long excludeOccurrenceId
     );
 
-    /**
-     * Efficient batch retrieval for all active bookings within the overall bounding window of a recurrence series.
-     */
+
     @Query("SELECT o FROM MeetingOccurrence o " +
            "WHERE o.room.id = :roomId " +
            "AND o.status = 'CONFIRMED' " +
@@ -56,9 +49,7 @@ public interface MeetingOccurrenceRepository extends JpaRepository<MeetingOccurr
             @Param("windowEnd") Instant windowEnd
     );
 
-    /**
-     * Calendar view query: date-range filtering for active bookings in a given time window.
-     */
+
     @Query("SELECT o FROM MeetingOccurrence o " +
            "WHERE (:roomId IS NULL OR o.room.id = :roomId) " +
            "AND (:organizerId IS NULL OR o.series.organizer.id = :organizerId) " +
@@ -74,9 +65,6 @@ public interface MeetingOccurrenceRepository extends JpaRepository<MeetingOccurr
             Pageable pageable
     );
 
-    /**
-     * Finds occurrences in a series scheduled on or after a given date (used for THIS_AND_FUTURE edits/cancellations).
-     */
     @Query("SELECT o FROM MeetingOccurrence o " +
            "WHERE o.series.id = :seriesId " +
            "AND o.originalLocalDate >= :fromDate " +
@@ -86,9 +74,7 @@ public interface MeetingOccurrenceRepository extends JpaRepository<MeetingOccurr
             @Param("fromDate") LocalDate fromDate
     );
 
-    /**
-     * Finds historical/past occurrences for data retention cleanup.
-     */
+
     @Query("SELECT o FROM MeetingOccurrence o " +
            "WHERE o.endTimeUtc < :cutoffTime " +
            "AND (o.status = 'CANCELLED' OR o.series.status = 'CANCELLED' OR o.series.status = 'COMPLETED')")

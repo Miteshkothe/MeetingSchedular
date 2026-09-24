@@ -24,10 +24,7 @@ public interface MeetingSeriesRepository extends JpaRepository<MeetingSeries, Lo
 
     List<MeetingSeries> findByRoomId(Long roomId);
 
-    /**
-     * Finds active series whose materialized horizon is approaching.
-     * Used by the rolling horizon background expansion job.
-     */
+
     @Query("SELECT s FROM MeetingSeries s WHERE s.status = :status AND s.recurrenceRule IS NOT NULL " +
             "AND s.horizonEnd <= :thresholdDate AND s.startDate <= :materializationEnd " +
             "AND (s.recurrenceRule.endDate IS NULL OR s.horizonEnd < s.recurrenceRule.endDate)")
